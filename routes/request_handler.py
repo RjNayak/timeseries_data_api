@@ -6,15 +6,35 @@ import requests
 
 
 def get_average(lst):
+    """Calculates avergae value of items in a list
+    :param lst: list of values to be averaged
+    :type lst: list
+    :returns : a value
+    :rtype: float
+    """
     if len(lst) > 0:
         return sum(lst) / len(lst)
 
 
 def get_cleaned_list(val):
+    """Removes None from the list
+    :param val: list of values to be cleaned
+    :type val: list
+    :returns: a list wihtout None
+    :rtype: list
+    """
     return [i for i in val if i]
 
 
 def get_timeframes(timelist, period):
+    """ Returns a list of time servies values
+    :param timelist: list of time values
+    :type timelist: list
+    :param period: numeric value
+    :type period: interger
+    :returns: a list
+    :rtype: list of time values
+    """
     time_frames = []
     for k in range(0, len(timelist), period):
         time_frames.append(timelist[k])
@@ -22,6 +42,10 @@ def get_timeframes(timelist, period):
 
 
 def get_timeseries_data():
+    """ Gets JOSN timeseries data from the REST service
+    :returns: a JSON object
+    :rtype: json
+    """
     r = requests.get(url='https://reference.intellisense.io/test.dataprovider')
     json_data = r.json()
     return json_data
@@ -31,7 +55,12 @@ def configure_handler(app):
 
     @app.route("/data_transformation/timeseries/v1.0/asset_metrics/average", methods=["POST"])
     def transform_data():
-
+        """ API endpoint to retunr averhaed timeseries data over a period of time
+        :request param period: numeric value
+        :type period: interger
+        :returns: a JOSN object
+        :rtype: JSON
+        """
         response_object = {}
         response_code = 200
 
