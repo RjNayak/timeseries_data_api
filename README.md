@@ -29,7 +29,7 @@ https://app.swaggerhub.com/apis/RjNayak/timeseries_data_api/1.0.0
 The following technologies are used in this project:
 
 - [Python](https://www.python.org/)
-- [requests] (https://pypi.org/project/requests/)
+- [requests](https://pypi.org/project/requests/)
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
 - [Pytest](https://docs.pytest.org/en/6.2.x/)
 - [Docker](https://www.docker.com/)
