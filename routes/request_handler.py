@@ -46,22 +46,26 @@ def configure_handler(app):
             inner_object = {}
 
             # get timeseries data fromo wrapper function
-            timeseries_data = get_timeseries_data()
+            try:
+                timeseries_data = get_timeseries_data()
+                for asset_id, value in timeseries_data.items():
+                    if type(value) is dict:
+                        for key, val in value.items():
+                            if key != 'time':
+                                cleaned_lst = get_cleaned_list(val)
+                                out = [get_average(cleaned_lst[k:k+period_value])
+                                       for k in range(0, len(cleaned_lst), period_value)]
+                                inner_object[key] = out
+                            else:
+                                time_frame_data = get_timeframes(
+                                    val, period_value)
+                                inner_object['time'] = time_frame_data
+                    out_json[asset_id] = inner_object
 
-            for asset_id, value in timeseries_data.items():
-                if type(value) is dict:
-                    for key, val in value.items():
-                        if key != 'time':
-                            cleaned_lst = get_cleaned_list(val)
-                            out = [get_average(cleaned_lst[k:k+period_value])
-                                   for k in range(0, len(cleaned_lst), period_value)]
-                            inner_object[key] = out
-                        else:
-                            time_frame_data = get_timeframes(val, period_value)
-                            inner_object['time'] = time_frame_data
-                out_json[asset_id] = inner_object
-
-            response_object = json.dumps(out_json, indent=4)
+                response_object = json.dumps(out_json, indent=4)
+            except requests.exceptions.Timeout:
+                response_object = {"error": "source connection timeout"}
+                response_code = 500
 
         else:
             response_object = json.dumps({"error": "invalid input"}, indent=4)
